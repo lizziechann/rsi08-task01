@@ -82,14 +82,14 @@ def update_frame():
         if overlay["start"] <= elapsed <= overlay["start"] + overlay["duration"]:
             ov_img = Image.open(overlay["path"]).convert("RGBA")
             ow, oh = ov_img.size
-            x = (bg_w - ow) // 2
+            x = (bg_w - ow) // 2  # centering
             y = (bg_h - oh) // 2
 
             if "imag2" in overlay["path"]:
                 scale = min((bg_w * 0.4) / ow, (bg_h * 0.4) / oh)
                 ov_img = ov_img.resize((int(ow * scale), int(oh * scale)), Image.LANCZOS)
                 ow, oh = ov_img.size
-                x = (bg_w - ow) // 2
+                x = (bg_w - ow) // 2  # smaller size like in demo
                 y = (bg_h - oh) // 2
 
             if "imag4.png" in overlay["path"]:
