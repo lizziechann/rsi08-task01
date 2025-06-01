@@ -1,6 +1,10 @@
 import pygame
 import sys
 import time
+import os #for path handling
+
+# Get the directory where the current script is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 #initialise pygame
 pygame.init()
@@ -8,11 +12,13 @@ pygame.init()
 screen = pygame.display.set_mode((700, 700))
 pygame.display.set_caption("Panda Search Game")
 
-#load images
-image1 = pygame.image.load("/Users/elizabeth/Documents/rsi08/image1.png") #grayscale
-image2_panda = pygame.image.load("/Users/elizabeth/Documents/rsi08/image2.png") #panda only
-image3 = pygame.image.load("/Users/elizabeth/Documents/rsi08/image3.png") #grayscale again
-image4 = pygame.image.load("/Users/elizabeth/Documents/rsi08/image4.png") #search image
+
+# Load images using paths relative to script folder
+image1 = pygame.image.load(os.path.join(BASE_DIR, "media", "image1.png"))  # grayscale
+image2_panda = pygame.image.load(os.path.join(BASE_DIR, "media", "image2.png"))  # panda only
+image3 = pygame.image.load(os.path.join(BASE_DIR, "media", "image3.png"))  # grayscale again
+image4 = pygame.image.load(os.path.join(BASE_DIR, "media", "image4.png"))  # search image
+
 
 screen_rect = screen.get_rect()
 
@@ -90,13 +96,18 @@ for trial in range(NUM_REPETITIONS):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 click_pos = event.pos
+                reaction_time = time.time() - start_time
                 print(f"Trial {trial+1}: Mouse clicked at {click_pos}")
+                print(f"Reaction time: {reaction_time:.2f} seconds")
 
                 target_x = image4_rect.left + 12
                 target_y = image4_rect.top + 9
                 target_width = 75
                 target_height = 50
                 target_rect = pygame.Rect(target_x, target_y, target_width, target_height)
+
+
+                reaction_times.append(reaction_time)  # Record reaction time regardless 
 
                 if target_rect.collidepoint(click_pos):
                     print("Correct! You clicked on the panda.")
@@ -105,6 +116,7 @@ for trial in range(NUM_REPETITIONS):
                     game_over = True
                 else:
                     print("Incorrect. Try again.")
+                    clicked = True #end trial immediately on incorrect click
 
         #timeout after 2000 ms (2 seconds)
         if (time.time() - start_time) > 2.0: #pygame uses ms, python uses s
